@@ -4,6 +4,7 @@ import os
 from google.cloud import bigquery
 import argparse
 import json
+import logging
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Stream bigquery results to file")
