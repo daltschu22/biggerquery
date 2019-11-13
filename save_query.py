@@ -2,6 +2,7 @@
 
 import os
 from google.cloud import bigquery
+from google.oauth2 import service_account
 import argparse
 import json
 import logging
