@@ -38,15 +38,15 @@ def main():
 
     query_string = args.query_string
     output_file = args.output_file
-    max_rows = args.max_rows
+    # max_rows = args.max_rows
     project = args.table_project
     service_account_json = args.service_account_json
     # PROJECT = project
-    
-    if args.json:
-        output_format = 'json'
-    if args.csv:
-        output_format = 'csv'
+
+    # if args.json:
+    #     output_format = 'json'
+    # if args.csv:
+    #     output_format = 'csv'
 
     if service_account_json:
         SERVICE_ACCOUNT = service_account_json
@@ -82,8 +82,6 @@ def main():
                 row_dict[schema[i].name] = attr
                 i += 1
 
-            # list_of_rows.append(row_dict)
-       
             outfile.write('{}\n'.format(json.dumps(row_dict)))
 
 
