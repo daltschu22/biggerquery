@@ -6,6 +6,7 @@ from google.oauth2 import service_account
 import argparse
 import json
 import logging
+from datetime import datetime
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Stream bigquery results to file")
@@ -28,7 +29,7 @@ def initiate_bigquery_client(project, credentials=None):
             bq_client = bigquery.Client(project=project, credentials=credentials)
         else:
             bq_client = bigquery.Client(project=project)
-        return bq
+        return bq_client
     except Exception as e:
         print("ERROR: Could not connect to bigquery API!: {}".format(e))
 
@@ -59,15 +60,31 @@ def main():
         # Initialize the bq client
         bq = initiate_bigquery_client(project)
 
-    try:
-        query_job = bq.query(query_string)
-    except Exception:
-        logging.error('BQ query failed!: {}'.format(Exception))
+    # print(bq)
 
-    # query_job.
+    # try:
+    query_job = bq.query(query_string)
+    # except Exception:
+    #     logging.error('BQ query failed!: {}'.format(Exception))
+
+    query_results = query_job.result()
+    schema = query_results.schema
 
     with open(output_file, 'w') as outfile:
-        json.dump(query_job.result())
+        for row in query_results:
+            # json.dump(line, outfile)
+            # line_json = json.dumps(line.get('rows'))
+            i = 0
+            row_dict = {}
+            for attr in row:
+                if isinstance(attr, datetime):
+                    attr = attr.strftime('%Y-%m-%d %H:%M:%S')
+                row_dict[schema[i].name] = attr
+                i += 1
+
+            # list_of_rows.append(row_dict)
+       
+            outfile.write('{}\n'.format(json.dumps(row_dict)))
 
 
 if __name__ == "__main__":
