@@ -5,6 +5,7 @@ from google.cloud import bigquery
 import argparse
 import json
 
+PROJECT = os.environ.get('GCP_PROJECT')
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Stream bigquery results to file")
@@ -20,7 +21,7 @@ def parse_arguments():
 
     return parser.parse_args()
 
-def initiate_bigquery_client(credentials=None, PROJECT):
+def initiate_bigquery_client(PROJECT, credentials=None):
     # print("Initializing google storage client...")
     try:
         if credentials:
@@ -39,6 +40,9 @@ def main():
     max_rows = args.max_rows
     project = args.table_project
     service_account_json = args.service_account_json
+
+    if project:
+        PROJECT = project_override
     
     if args.json:
         output_format = 'json'
