@@ -42,7 +42,7 @@ def main():
     service_account_json = args.service_account_json
 
     if project:
-        PROJECT = project_override
+        PROJECT = project
     
     if args.json:
         output_format = 'json'
