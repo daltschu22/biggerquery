@@ -12,7 +12,7 @@ def parse_arguments():
     parser.add_argument('--output-file', action='store', type=str, dest='output_file', metavar='/path/to/save/json', help='Path to save rollup list into')
     parser.add_argument('--max_rows', action='store', type=int, dest='max_rows', metavar='max_rows', help='number of rows to accept')
     parser.add_argument('--project', required=True, action='store', type=str, dest='table_project', metavar='project', help='project table resides in')
-    parser.add_argument('--service-account-json', dest='service_account_json', required=False, help="service account json")
+    parser.add_argument('--service-account-json', type=str, action='store', dest='service_account_json', required=False, help="service account json")
 
     format_group = parser.add_mutually_exclusive_group(required=True)
     format_group.add_argument('--json', action='store_true', help='json format output')
