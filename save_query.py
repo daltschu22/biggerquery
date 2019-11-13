@@ -5,8 +5,6 @@ from google.cloud import bigquery
 import argparse
 import json
 
-PROJECT = os.environ.get('GCP_PROJECT')
-
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Stream bigquery results to file")
     parser.add_argument('--query', nargs='+', action='store', type=str, dest='query_string', metavar='query_string', help='select blah where blah"')
@@ -21,13 +19,13 @@ def parse_arguments():
 
     return parser.parse_args()
 
-def initiate_bigquery_client(PROJECT, credentials=None):
+def initiate_bigquery_client(project, credentials=None):
     # print("Initializing google storage client...")
     try:
         if credentials:
-            bq_client = bigquery.Client(project=PROJECT, credentials=credentials)
+            bq_client = bigquery.Client(project=project, credentials=credentials)
         else:
-            bq_client = bigquery.Client(project=PROJECT)
+            bq_client = bigquery.Client(project=project)
         return bq
     except Exception as e:
         print("ERROR: Could not connect to bigquery API!: {}".format(e))
@@ -40,9 +38,7 @@ def main():
     max_rows = args.max_rows
     project = args.table_project
     service_account_json = args.service_account_json
-
-    if project:
-        PROJECT = project
+    # PROJECT = project
     
     if args.json:
         output_format = 'json'
@@ -56,10 +52,10 @@ def main():
             scopes=["https://www.googleapis.com/auth/cloud-platform"],
         )
         # Initialize the bq client
-        bq = initiate_bigquery_client(credentials=credentials, project=project)
+        bq = initiate_bigquery_client(project, credentials=credentials)
     else:
         # Initialize the bq client
-        bq = initiate_bigquery_client(project=project)
+        bq = initiate_bigquery_client(project)
 
     try:
         query_job = bq.query(query_string)
